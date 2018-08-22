@@ -10,6 +10,143 @@
 
 # Gain-Filter
 
+Laplace transform transfer function - also denoted the continous-time transfer function - of a first order lowpass filter is
+
+$$
+H(s) = \frac{y(s)}{u(s)} = \frac{1}{T \cdot s + 1}
+$$
+
+Where $T$ is the time-constant. $u$ is filter input, and $y$ is filter output.
+
+The discretization of this continous-time filter is just the exponential weighted moving average with:
+
+$$
+a = \frac{h}{T + h} = 1-g
+$$
+
+$a$ being the filter parameter.
+
+$$
+y(t_k) = u(t_k) \cdot a + (1-a) \cdot y(t_k-1) 
+$$
+
+[[haugen2008derivation]](#h2.0.0.0.1_-haugen2008derivation-)
+
+The kalman optimal filtering contains this operation with linear algebra and $a$ being the kalman gain.
+Therefore it is fitting to call the exponential weighted moving average a *gain filter*.
+When a kalman filter reaches a steady state the kalman gain often converges to a fixed value.
+With the proper filter parameter *gain* a simple *gain filter* will perform the same as a kalman filter with constant kalman gain.
+The filter parameter *gain* is simple to tune for low-dimensional problems. 
+Those often accur during signal processing. 
+This makes the *gain filter* a useful tool for many filtering problems.
+
+The simple formulation above assumes a constant time step $h$.
+
+But in practical filtering problems the time steps are often not constant.
+To use the *gain filter* anyway the filter parameter needs to be adjusted to the different timestep.
+In a practical solution one would store the last filter update time and compute a timestep with differencing the current time or measurement time.
+
+The filter parameter $a$ corresponds to a certain timestep duration $h$.
+Those parameters fully describe a *gain filter*:
+
+$$
+\text{Gain Filter: } (a, h)
+$$
+
+The state of a *gain filter* contains a current estimated value and optionally the last update time.
+
+## Convert filter parameter to different time step
+
+### Given
+
+Two gain filter $(h_1,a_1)$ \& $(h_2,a_2)$ with different time step $h$ and same time constant $T$:
+
+$
+h_1, h_2
+$$
+
+
+$$
+a_1 = \frac{h_1}{T_1 + h_1}
+$$
+
+$$
+a_2 = \frac{h_2}{T_2 + h_2}
+$$
+
+$$
+T_1 = T_2
+$$
+
+### Looking for
+
+
+$$
+a_2
+$$
+
+### Solution
+
+
+$$
+T_1 = T_2 = \frac{h_1 \cdot (1-a_1)}{a_1}
+$$
+
+$$
+a_2 = \frac{h_2}{T_2 + h_2}
+$$
+
+$$
+a_2 = \frac{h_2}{\frac{h_1 \cdot (1-a_1)}{a_1} + h_2}
+$$
+
+
+
+### Derivation
+
+
+$$
+a_1 = \frac{h_1}{T_1 + h_1} 
+$$
+
+$$
+h_1 = (a_1) \cdot (T_1 + h_1) = T_1 \cdot a_1 + h_1 \cdot a_1
+$$
+
+$$
+h_1 \cdot (1-a_1) = T_1 \cdot a_1
+$$
+
+
+$$
+T_1 = \frac{h_1 \cdot (1-a_1)}{a_1} = T_2
+$$
+
+
+$$
+a_2 = \frac{h_2}{T_2 + h_2} 
+$$
+
+$$
+h_2 = (a_2) \cdot (T_2 + h_2)
+$$
+
+
+$$
+a_2 = \frac{h_2}{T_2 + h_2}
+$$
+
+
+$$
+a_2 = \frac{h_2}{\frac{h_1 \cdot (1-a_1)}{a_1} + h_2}
+$$
+
+# Bibliography
+
+##### [haugen2008derivation] 
+Derivation of a Discrete-Time Lowpass Filter, Finn Haugen, 2008
+[(pdf)](http://techteach.no/simview/lowpass_filter/doc/filter_algorithm.pdf)
+
 [Back to index](index.html) &raquo;
 [Back to top](#) 
 
