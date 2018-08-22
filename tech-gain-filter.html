@@ -40,18 +40,19 @@ The filter parameter *gain* is simple to tune for low-dimensional problems.
 Those often accur during signal processing. 
 This makes the *gain filter* a useful tool for many filtering problems.
 
+The filter parameter $a$ corresponds to a certain timestep duration $h$.
+Those parameters fully describe a *gain filter*:
+
+$$
+\text{Gain Filter: } (h, a)
+$$
+
 The simple formulation above assumes a constant time step $h$.
 
 But in practical filtering problems the time steps are often not constant.
 To use the *gain filter* anyway the filter parameter needs to be adjusted to the different timestep.
 In a practical solution one would store the last filter update time and compute a timestep with differencing the current time or measurement time.
 
-The filter parameter $a$ corresponds to a certain timestep duration $h$.
-Those parameters fully describe a *gain filter*:
-
-$$
-\text{Gain Filter: } (a, h)
-$$
 
 The state of a *gain filter* contains a current estimated value and optionally the last update time.
 
@@ -61,7 +62,7 @@ The state of a *gain filter* contains a current estimated value and optionally t
 
 Two gain filter $(h_1,a_1)$ & $(h_2,a_2)$ with different time step $h$ and same time constant $T$:
 
-$
+$$
 h_1, h_2
 $$
 
