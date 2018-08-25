@@ -8,11 +8,76 @@
 
 [Back to index](index.html)
 
-# KF: Kalman-Filter 
 
-# EKF: Extended-Kalman-Filter
 
-# IF: Information-Filter
+
+# Kalman-Filter (KF)
+
+[Zustandsraummodell zur Prozessbeschreibung Pg.17](https://www.ei.rub.de/media/ei/lehrmaterialien/120/a896a6a0b135530a8a00b094fa631b2ea0e1c95d/KalmanFolien.pdf)
+
+
+| Symbol          | Shape                      | Description                                      |
+| -------         | ---                        | ------------                                     |
+| $\pmb{x}$       | $\mathbb{R}^{N \times 1}$  | system state vector                              |
+| $\hat{\pmb{x}}$ | $\mathbb{R}^{N \times 1}$  | state estimation                                 |
+| $\pmb{P}$       | $\mathbb{R}^{N \times N}$  | state estimation error covariance matrix         |
+| $\pmb{F}$       | $\mathbb{R}^{N \times N}$  | system dynamic state transition matrix           |
+| $\pmb{Q}$       | $\mathbb{R}^{N \times N}$  | prediction covariance                            |
+| $\pmb{u}$       | $\mathbb{R}^{K \times 1}$  | external system input vector (e.g. user control) |
+| $\pmb{B}$       | $\mathbb{R}^{N \times K}$  | external input state dynamic                     |
+| $\pmb{z}$       | $\mathbb{R}^{M \times 1}$  | observation vector                               |
+| $\pmb{H}$       | $\mathbb{R}^{N \times M}$  | observation matrix transforms a state vector to a observation vector |
+| $\pmb{R}$       | $\mathbb{R}^{M \times M}$  | observation error covariance matrix              |
+
+[Input control noise is encoded in prediction covariance](https://stats.stackexchange.com/questions/134920/kalman-filter-with-input-control-noise)
+
+
+$N$ number of states
+
+$M$ number of observations
+
+$K$ number of external system inputs
+
+
+$\textbf{kalman-filter:}$ $(\pmb{F}, \pmb{B}, \pmb{Q}, \pmb{H}, \pmb{R}, \hat{\pmb{x}}, \pmb{P})$
+
+$\textbf{initial condition:}$ $(\pmb{x}_0, \pmb{P}_0)$
+
+$\textbf{predict:} (\pmb{F}, \pmb{B}, \hat{\pmb{x}_k}, \pmb{P}_k, \pmb{u}_k) \mapsto (\hat{\pmb{x}}_{k+1}, \pmb{P}_{k+1}) $
+
+$\hat{\pmb{x}}_{k+1} = \pmb{F} \cdot \hat{\pmb{x}_k} + \pmb{B} \cdot \pmb{u}_k$
+
+$\pmb{P}_{k+1} = \pmb{F} \cdot \pmb{P}_k \cdot \pmb{F}^T + \pmb{Q}$
+
+$\textbf{observe:} (\pmb{H}, \hat{\pmb{x}_k}, \pmb{P}_k, \pmb{z}_k) \mapsto (\hat{\pmb{x}}_{k+1}, \pmb{P}_{k+1}) $
+
+innovation: 
+$\pmb{w} = \pmb{z}_k - \pmb{H} \cdot \hat{\pmb{x}}_k$
+
+$\pmb{w} \in \mathbb{R}^{M \times 1}$
+
+residual covariance:
+$\pmb{S} = \pmb{H} \cdot \pmb{P} \cdot \pmb{H}^T + \pmb{R}$
+
+$\pmb{S} \in \mathbb{R}^{M \times M}$
+
+kalman gain:
+$\pmb{K} = \pmb{P} \cdot \pmb{H}^T \cdot \pmb{S}^{-1}$
+
+$\pmb{K} \in \mathbb{R}^{N \times M}$
+
+$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k + \pmb{K} \cdot \pmb{w}$
+
+$\hat{\pmb{P}}_{k+1} = \hat{\pmb{P}}_k - \pmb{K} \cdot \pmb{S} \cdot \pmb{K}^T$
+
+
+
+# Extended-Kalman-Filter (EKF)
+
+
+
+# Information-Filter (IF)
+
 
 [Back to index](index.html) &raquo;
 [Back to top](#) 
