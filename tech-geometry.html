@@ -11,17 +11,32 @@
 # Geometry
 
 ## Geometric objects
-
-- point
+ 
+__point__: $\pmb{x} 
+ = \begin{pmatrix} \pmb{x}_0  \\ \pmb{x}_1  \\ \pmb{x}_2  \end{pmatrix}$
+$x_0, x_1, x_2 \in \mathbb{R}  $
 - line
 - ray
-- line segment
-- circle
+- line segment 
+- circle 
 
 ## Distance between geometric objects
 
 ### d(point, point)
+ 
+$d(\textbf{point} = \pmb{x}, \textbf{point} = \pmb{x'})
+ = \sqrt{(\pmb{x}-\pmb{x'}) \cdot (\pmb{x}-\pmb{x'})}$
+
+$d(\pmb{x}, \pmb{x'}) = \sqrt{(\pmb{x}_0-\pmb{x'}_0)^2 + (\pmb{x}_1-\pmb{x'}_1)^2 + (\pmb{x}_2-\pmb{x'}_2)^2}$
+
 ### d(point, line)
+
+$\textbf{line}:$ $(\pmb{n},d)$
+$\textbf{point}:$ $\pmb{x}$
+
+$d(\textbf{point}, \textbf{line}) = \pmb{x} \cdot \pmb{n} - d$
+
+
 ### d(point, ray)
 ### d(point, line segment)
 ### d(point, circle)
