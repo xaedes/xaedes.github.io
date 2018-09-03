@@ -37,6 +37,8 @@ $M$ number of observations
 
 $K$ number of external system inputs (often controls)
 
+<br/ >
+
 The process model describes how the state varies over time.
 
 $\textbf{process model:} (\pmb{F}, \pmb{B}, \pmb{x}_k, \pmb{P}_k, \pmb{u}_k) \mapsto (\pmb{x}_{k+1}) $
@@ -61,20 +63,30 @@ $\pmb{Q}_{F} \in \mathbb{R}^{N \times N}$, $\pmb{Q}_{B} \in \mathbb{R}^{N \times
 
 $\pmb{x}_{k+1} =  \pmb{F} \cdot \pmb{x}_k + \pmb{v}_{F} + \pmb{B} \cdot \pmb{u}_k + \pmb{v}_{B} $
 
+<br/ >
+
 The observation model describes the state in terms of an observation:
 
 $\textbf{observation model:}$ $(\pmb{H}, \pmb{z}_k) \mapsto (\widetilde{\pmb{x}}_{k}) $
 
 $\widetilde{\pmb{x}}_{k} = \pmb{H} \cdot \pmb{z}_{k}$
 
+<br/ >
+
 ## filter equations
 A kalman filter is a 7-tuple with transition matrices, their covariance matrices, an estimated state and its covariance matrix:
 
 $\textbf{KalmanFilter:}$ $(\pmb{F}, \pmb{B}, \pmb{Q}, \pmb{H}, \pmb{R}, \hat{\pmb{x}}, \pmb{P})$
 
+<br/ >
+
+__NOTE__: prediction and observation here happen at different steps $k$. The time associated with each step can be different, but strictly monotous increasing with $k$. This makes it easy to use the same equations for equally spaced timesteps with simple predict & observe iterations on measurement as well as for varying timestep and interleaved predict and observe operations.
+
+<br/ >
+
 $\textbf{initial condition:}$ $(\pmb{x}_0, \pmb{P}_0)$
 
-__NOTE__: prediction and observation here happen at different steps $k$
+<br/ >
 
 $\textbf{predict:}$ $(\pmb{F}, \pmb{B}, \hat{\pmb{x}_k}, \pmb{P}_k, \pmb{u}_k) \mapsto (\hat{\pmb{x}}_{k+1}, \pmb{P}_{k+1}) $
 
@@ -82,7 +94,7 @@ $\hat{\pmb{x}}_{k+1} = \pmb{F} \cdot \hat{\pmb{x}_k} + \pmb{B} \cdot \pmb{u}_k$
 
 $\pmb{P}_{k+1} = \pmb{F} \cdot \pmb{P}_k \cdot \pmb{F}^T + \pmb{Q}$
 
-
+<br/ >
 $\textbf{observe:}$ $(\pmb{H}, \hat{\pmb{x}_k}, \pmb{P}_k, \pmb{z}_k) \mapsto (\hat{\pmb{x}}_{k+1}, \pmb{P}_{k+1}) $
 
 innovation: 
@@ -104,8 +116,9 @@ $\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k + \pmb{K} \cdot \pmb{w}$
 
 $\pmb{P}_{k+1} = \pmb{P}_k - \pmb{K} \cdot \pmb{S} \cdot \pmb{K}^T$
 
+<br/ >
 
-other formulation showing the [gain filter equation](tech-gain-filter.html):
+Another formulation showing the [gain filter equation](tech-gain-filter.html):
 
 __NOTE__: shapes of matrices here seems to be bugged. todo: fix it
 
