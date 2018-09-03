@@ -13,6 +13,7 @@
 
 # Kalman-Filter (KF)
 
+## system model
 [Zustandsraummodell zur Prozessbeschreibung Pg.17](https://www.ei.rub.de/media/ei/lehrmaterialien/120/a896a6a0b135530a8a00b094fa631b2ea0e1c95d/KalmanFolien.pdf)
 
 
@@ -29,27 +30,60 @@
 | $\pmb{H}$       | $\mathbb{R}^{N \times M}$  | observation matrix transforms a state vector to a observation vector |
 | $\pmb{R}$       | $\mathbb{R}^{M \times M}$  | observation error covariance matrix              |
 
-[Input control noise is encoded in prediction covariance](https://stats.stackexchange.com/questions/134920/kalman-filter-with-input-control-noise)
-
 
 $N$ number of states
 
 $M$ number of observations
 
-$K$ number of external system inputs
+$K$ number of external system inputs (often controls)
+
+The process model describes how the state varies over time.
+
+$\textbf{process model:} (\pmb{F}, \pmb{B}, \pmb{x}_k, \pmb{P}_k, \pmb{u}_k) \mapsto (\pmb{x}_{k+1}) $
+
+$\pmb{x}_{k+1} =  \pmb{F} \cdot \pmb{x}_k + \pmb{B} \cdot \pmb{u}_k + \pmb{v} $
+
+$\pmb{v} \sim N(0,\pmb{Q})$
 
 
-$\textbf{kalman-filter:}$ $(\pmb{F}, \pmb{B}, \pmb{Q}, \pmb{H}, \pmb{R}, \hat{\pmb{x}}, \pmb{P})$
+[Input control noise is encoded in prediction covariance](https://stats.stackexchange.com/questions/134920/kalman-filter-with-input-control-noise)
+The prediction covariance $\pmb{Q}$ contains state transition covariance $\pmb{Q}_{F}$ and external input dynamic covariance $\pmb{Q}_{B}$:
+
+$\pmb{v}_{F} \sim N(0,\pmb{Q}_{F})$
+
+$\pmb{v}_{B} \sim N(0,\pmb{Q}_{B})$
+
+$\pmb{v} = \pmb{v}_{F} + \pmb{v}_{B}$
+
+$\pmb{Q} = \pmb{Q}_{F} + \pmb{B} \cdot \pmb{Q}_{B} \cdot \pmb{B}^T$
+
+$\pmb{Q}_{F} \in \mathbb{R}^{N \times N}$, $\pmb{Q}_{B} \in \mathbb{R}^{N \times K}$
+
+$\pmb{x}_{k+1} =  \pmb{F} \cdot \pmb{x}_k + \pmb{v}_{F} + \pmb{B} \cdot \pmb{u}_k + \pmb{v}_{B} $
+
+The observation model describes the state in terms of an observation:
+
+$\textbf{observation model:}$ $(\pmb{H}, \pmb{z}_k) \mapsto (\widetilde{\pmb{x}}_{k}) $
+
+$\widetilde{\pmb{x}}_{k} = \pmb{H} \cdot \pmb{z}_{k}$
+
+## filter equations
+A kalman filter is a 7-tuple with transition matrices, their covariance matrices, an estimated state and its covariance matrix:
+
+$\textbf{KalmanFilter:}$ $(\pmb{F}, \pmb{B}, \pmb{Q}, \pmb{H}, \pmb{R}, \hat{\pmb{x}}, \pmb{P})$
 
 $\textbf{initial condition:}$ $(\pmb{x}_0, \pmb{P}_0)$
 
-$\textbf{predict:} (\pmb{F}, \pmb{B}, \hat{\pmb{x}_k}, \pmb{P}_k, \pmb{u}_k) \mapsto (\hat{\pmb{x}}_{k+1}, \pmb{P}_{k+1}) $
+__NOTE__: prediction and observation here happen at different steps $k$
+
+$\textbf{predict:}$ $(\pmb{F}, \pmb{B}, \hat{\pmb{x}_k}, \pmb{P}_k, \pmb{u}_k) \mapsto (\hat{\pmb{x}}_{k+1}, \pmb{P}_{k+1}) $
 
 $\hat{\pmb{x}}_{k+1} = \pmb{F} \cdot \hat{\pmb{x}_k} + \pmb{B} \cdot \pmb{u}_k$
 
 $\pmb{P}_{k+1} = \pmb{F} \cdot \pmb{P}_k \cdot \pmb{F}^T + \pmb{Q}$
 
-$\textbf{observe:} (\pmb{H}, \hat{\pmb{x}_k}, \pmb{P}_k, \pmb{z}_k) \mapsto (\hat{\pmb{x}}_{k+1}, \pmb{P}_{k+1}) $
+
+$\textbf{observe:}$ $(\pmb{H}, \hat{\pmb{x}_k}, \pmb{P}_k, \pmb{z}_k) \mapsto (\hat{\pmb{x}}_{k+1}, \pmb{P}_{k+1}) $
 
 innovation: 
 $\pmb{w} = \pmb{z}_k - \pmb{H} \cdot \hat{\pmb{x}}_k$
@@ -68,9 +102,38 @@ $\pmb{K} \in \mathbb{R}^{N \times M}$
 
 $\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k + \pmb{K} \cdot \pmb{w}$
 
-$\hat{\pmb{P}}_{k+1} = \hat{\pmb{P}}_k - \pmb{K} \cdot \pmb{S} \cdot \pmb{K}^T$
+$\pmb{P}_{k+1} = \pmb{P}_k - \pmb{K} \cdot \pmb{S} \cdot \pmb{K}^T$
 
 
+other formulation showing the [gain filter equation](tech-gain-filter.html):
+
+__NOTE__: shapes of matrices here seems to be bugged. todo: fix it
+
+$\hat{\pmb{x}}_{k+1} = (1-\pmb{K}) \cdot \hat{\pmb{x}}_k + \pmb{K} \cdot $\widetilde{\pmb{x}}_{k}$
+
+$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k - \pmb{K \cdot \hat{\pmb{x}}_k} + \pmb{K} \cdot \pmb{z}_k$
+
+$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k - \pmb{K} \cdot (\hat{\pmb{x}}_k - \pmb{z}_k)$
+
+$\hat{\pmb{x}}_k - \pmb{z}_k$ is called the residual. Hence "residual covariance" for $\pmb{S}$ in the equation for $\pmb{P}_{k+1} $.
+
+
+Due to numerical errors the computation of $\pmb{P}_{k+1}$ can result in non-symmetrical covariance matrices.
+This is invalid. To restore symmetry:
+
+$\textbf{symmetrize:}$ $P_{symmetrical} = \frac{P + P^T}{2}$
+
+## web links
+
+- http://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies
+- https://github.com/xaedes/Python-Extendend-Kalman-Filter/blob/master/Kalman.py
+- https://stats.stackexchange.com/questions/134920/kalman-filter-with-input-control-noise
+- https://en.wikipedia.org/wiki/Kalman_filter
+
+german links:
+- https://de.wikipedia.org/wiki/Kalman-Filter
+- http://www.cbcity.de/das-kalman-filter-einfach-erklaert-teil-1
+- https://www.ei.rub.de/media/ei/lehrmaterialien/120/a896a6a0b135530a8a00b094fa631b2ea0e1c95d/KalmanFolien.pdf
 
 # Extended-Kalman-Filter (EKF)
 
