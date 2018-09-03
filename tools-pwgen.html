@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Index</title>
+<link rel="stylesheet" href="lib/highlight-styles/vs.css">
+</head>
+<body>
+<h1>Client Side Password Generator</h1>
+
+Passwords are generated locally using javascript (window.crypto.getRandomValues), that means no transmission of passwords over the web.
+
+<pre id="pws" style="text-align: left;"></pre>
+<span id="sel_len" style="text-align: left;">0</span> characters selected
+<script type="text/javascript">
+	function gen(){
+		var s = "";
+		var n = 64;
+		var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		var n_chars = chars.length;
+		for (var i = n - 1; i >= 0; i--) {
+			s += chars[Math.floor(Math.random()*n_chars)];
+		};
+		return s;
+	}
+	function gen2(){
+		var s = "";
+		var n = 64;
+		var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		var n_chars = chars.length;
+		var array = new Uint32Array(n);
+		window.crypto.getRandomValues(array);
+		for (var i = n - 1; i >= 0; i--) {
+			s += chars[array[i] % n_chars];
+		};
+		return s;
+	}		
+	function go(){
+		var n = 40;
+		var s = "";
+
+		var pws = {};
+		for (var i = n - 1; i >= 0; i--) {
+			var pw;
+			do{
+				pw = gen2();
+			} while(pws[pw] !== undefined);
+			pws[pw] = pw;
+
+			s += pw + "\r\n";
+		}
+		pws = null;
+		document.getElementById('pws').innerHTML = s;
+		document.getElementById('pws').onmousemove=function(e) {
+			var sel=''+window.getSelection()
+			var len = sel.length;
+			document.getElementById('sel_len').innerHTML = len > 0 ? len : 0;
+		}; 
+	}
+	document.body.onload=go;
+</script>
+</body></html>
