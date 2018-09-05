@@ -65,11 +65,11 @@ $\pmb{x}_{k+1} =  \pmb{F} \cdot \pmb{x}_k + \pmb{v}_{F} + \pmb{B} \cdot \pmb{u}_
 
 <br/ >
 
-The observation model describes the state in terms of an observation:
+The observation model describes an observation in terms of the state:
 
-$\textbf{observation model:}$ $(\pmb{H}, \pmb{z}_k) \mapsto (\widetilde{\pmb{x}}_{k}) $
+$\textbf{observation model:}$ $(\pmb{H}, \pmb{x}_k) \mapsto (\widetilde{\pmb{z}}_{k}) $
 
-$\widetilde{\pmb{x}}_{k} = \pmb{H} \cdot \pmb{z}_{k}$
+$\widetilde{\pmb{z}}_{k} = \pmb{H} \cdot \pmb{x}_{k}$
 
 <br/ >
 
@@ -118,21 +118,8 @@ $\pmb{P}_{k+1} = \pmb{P}_k - \pmb{K} \cdot \pmb{S} \cdot \pmb{K}^T$
 
 <br/ >
 
-Another formulation showing the [gain filter equation](tech-gain-filter.html):
-
-__NOTE__: shapes of matrices here seems to be bugged. todo: fix it
-
-$\hat{\pmb{x}}_{k+1} = (1-\pmb{K}) \cdot \hat{\pmb{x}}_k + \pmb{K} \cdot \widetilde{\pmb{x}}_{k}$
-
-$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k - \pmb{K \cdot \hat{\pmb{x}}_k} + \pmb{K} \cdot \pmb{z}_k$
-
-$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k - \pmb{K} \cdot (\hat{\pmb{x}}_k - \pmb{z}_k)$
-
-$\hat{\pmb{x}}_k - \pmb{z}_k$ is called the residual. Hence "residual covariance" for $\pmb{S}$ in the equation for $\pmb{P}_{k+1} $.
-
-
-Due to numerical errors the computation of $\pmb{P}_{k+1}$ can result in non-symmetrical covariance matrices.
-This is invalid. To restore symmetry:
+Due to numerical errors the computation of $\pmb{P}_{k+1}$ can result in invalid non-symmetrical covariance matrices.
+To restore symmetry:
 
 $\textbf{symmetrize:}$ $P_{symmetrical} = \frac{P + P^T}{2}$
 
