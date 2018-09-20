@@ -9,13 +9,13 @@
 [Back to index](index.html)
 
 
-
-
 # Kalman-Filter (KF)
 
-## system model
-[Zustandsraummodell zur Prozessbeschreibung Pg.17](https://www.ei.rub.de/media/ei/lehrmaterialien/120/a896a6a0b135530a8a00b094fa631b2ea0e1c95d/KalmanFolien.pdf)
+State is modelled with normal distributions.
+State transition over time is modelled as linear operations on state and normal distributed control variables.
+Observations are incorporated in the state estimation with a linear model linking observations and state.
 
+## system model
 
 | Symbol          | Shape                      | Description                                      |
 | -------         | ---                        | ------------                                     |
@@ -45,10 +45,12 @@ $\textbf{process model:} (\pmb{F}, \pmb{B}, \pmb{x}_k, \pmb{P}_k, \pmb{u}_k) \ma
 
 $\pmb{x}_{k+1} =  \pmb{F} \cdot \pmb{x}_k + \pmb{B} \cdot \pmb{u}_k + \pmb{v} $
 
+$\pmb{v}$ is zero mean normal distributed noise.
+
 $\pmb{v} \sim N(0,\pmb{Q})$
 
 
-[Input control noise is encoded in prediction covariance](https://stats.stackexchange.com/questions/134920/kalman-filter-with-input-control-noise)
+[Input control noise is encoded in prediction covariance.](https://stats.stackexchange.com/questions/134920/kalman-filter-with-input-control-noise)
 The prediction covariance $\pmb{Q}$ contains state transition covariance $\pmb{Q}_{F}$ and external input dynamic covariance $\pmb{Q}_{B}$:
 
 $\pmb{v}_{F} \sim N(0,\pmb{Q}_{F})$
@@ -69,7 +71,11 @@ The observation model describes an observation in terms of the state:
 
 $\textbf{observation model:}$ $(\pmb{H}, \pmb{x}_k) \mapsto (\widetilde{\pmb{z}}_{k}) $
 
-$\widetilde{\pmb{z}}_{k} = \pmb{H} \cdot \pmb{x}_{k}$
+$\widetilde{\pmb{z}}_{k} = \pmb{H} \cdot \pmb{x}_{k} + \pmb{u}$
+
+$\pmb{u}$ models zero mean normal distributed measurement noise.
+
+$\pmb{u} \sim N(0,\pmb{R})$
 
 <br/ >
 
@@ -110,6 +116,10 @@ $\pmb{S} \in \mathbb{R}^{M \times M}$
 kalman gain:
 $\pmb{K} = \pmb{P} \cdot \pmb{H}^T \cdot \pmb{S}^{-1}$
 
+$\pmb{K} = \frac{\pmb{P} \cdot \pmb{H}^T}{\pmb{S}}$
+
+$\pmb{K} = \frac{\pmb{P} \cdot \pmb{H}^T}{\pmb{H} \cdot \pmb{P} \cdot \pmb{H}^T + \pmb{R}}$ weights the measurement covariance with the current state estimation covariance.
+
 $\pmb{K} \in \mathbb{R}^{N \times M}$
 
 $\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k + \pmb{K} \cdot \pmb{w}$
@@ -122,6 +132,9 @@ Due to numerical errors the computation of $\pmb{P}_{k+1}$ can result in invalid
 To restore symmetry:
 
 $\textbf{symmetrize:}$ $P_{symmetrical} = \frac{P + P^T}{2}$
+
+
+
 
 ## web links
 
