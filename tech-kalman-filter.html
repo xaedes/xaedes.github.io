@@ -148,12 +148,91 @@ german links:
 - http://www.cbcity.de/das-kalman-filter-einfach-erklaert-teil-1
 - https://www.ei.rub.de/media/ei/lehrmaterialien/120/a896a6a0b135530a8a00b094fa631b2ea0e1c95d/KalmanFolien.pdf
 
+## Examples
+
+### Accumulate Simple Observations
+
+We directly observe the state. The state is assumed to not change at all.
+We just want to accumulate observations to improve the state estimation. 
+No real time is involved here only computation time steps $k$. 
+
+
+
+### Simple State Tracking with Observations
+
+We directly observe the state. We model the state process as a random walk with movements drawn from $N(0,\pmb{Q})$. 
+Since we have $N = 1$, $M = 1$ all matrices collapse to singular values.
+There are no external inputs so all terms related to that are omitted.
+
+$\pmb{F} = 1$ State stays constant
+$\pmb{H} = 1$ Direct measurement of state
+
+
+Prediction:
+
+$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}_k}$
+
+$\pmb{P}_{k+1} = \pmb{P}_k + \pmb{Q}$
+
+Observation:
+
+innovation: 
+$\pmb{w} = \pmb{z}_k - \hat{\pmb{x}}_k$
+
+residual covariance:
+$\pmb{S} = \pmb{P} + \pmb{R}$
+
+kalman gain:
+$\pmb{K} = \pmb{P} \cdot \pmb{S}^{-1} = \frac{\pmb{P}}{\pmb{P} + \pmb{R}}$
+
+$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k + \pmb{K} \cdot \pmb{w}$
+
+$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k + \frac{\pmb{P}}{\pmb{P} + \pmb{R}} \cdot \pmb{w}$
+
+$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k + \frac{\pmb{P}_k}{\pmb{P}_k + \pmb{R}} \cdot (\pmb{z}_k - \hat{\pmb{x}}_k)$
+
+$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k + \frac{\pmb{P}_k}{\pmb{P}_k + \pmb{R}} \cdot \pmb{z}_k - \frac{\pmb{P}_k}{\pmb{P}_k + \pmb{R}} \cdot \hat{\pmb{x}}_k$
+
+$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k \cdot (1 - \frac{\pmb{P}_k}{\pmb{P}_k + \pmb{R}}) + \frac{\pmb{P}_k}{\pmb{P}_k + \pmb{R}} \cdot \pmb{z}_k$
+
+$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k \cdot (1 - \pmb{K}) + \pmb{K} \cdot \pmb{z}_k$
+
+$\pmb{P}_{k+1} = \pmb{P}_k - \pmb{K} \cdot \pmb{S} \cdot \pmb{K}^T$
+
+$\pmb{P}_{k+1} = \pmb{P}_k - \frac{\pmb{P}_k^2}{\pmb{P}_k + \pmb{R}}$
+
+$\pmb{P}_{k+1} = \pmb{P}_k - \pmb{P}_k \cdot \pmb{K}$
+
+$\pmb{P}_{k+1} = \pmb{P}_k \cdot (1 - \pmb{K})$
+
+$\pmb{P}$ converges to $\pmb{P}_{\text{conv}}$ for constant $\pmb{Q}$ and $\pmb{R}$.
+
+$\pmb{P}_{\text{conv}} = (\pmb{P}_{\text{conv}} + \pmb{Q}) \cdot (1 - \frac{\pmb{P}_{\text{conv}} + \pmb{Q}}{\pmb{P}_{\text{conv}} + \pmb{Q} + \pmb{R}}) $
+
+$\pmb{P}_{\text{conv}} = \pmb{P}_{\text{conv}} - \frac{\pmb{P}_{\text{conv}}^2 + \pmb{P}_{\text{conv}} \cdot \pmb{Q}}{\pmb{P}_{\text{conv}} + \pmb{Q} + \pmb{R}} + \pmb{Q} - \frac{\pmb{Q} \cdot \pmb{P}_{\text{conv}} + \pmb{Q}^2}{\pmb{P}_{\text{conv}} + \pmb{Q} + \pmb{R}}$
+
+$\pmb{P}_{\text{conv}} = \pmb{P}_{\text{conv}} + \pmb{Q} - \frac{\pmb{P}_{\text{conv}}^2 + 2 \pmb{Q} \cdot \pmb{P}_{\text{conv}} + \pmb{Q}^2}{\pmb{P}_{\text{conv}} + \pmb{Q} + \pmb{R}}$
+
+$\pmb{Q} = \frac{\pmb{P}_{\text{conv}}^2 + 2 \pmb{Q} \cdot \pmb{P}_{\text{conv}} + \pmb{Q}^2}{\pmb{P}_{\text{conv}} + \pmb{Q} + \pmb{R}}$
+
+$\pmb{Q} \cdot \pmb{P}_{\text{conv}} + \pmb{Q}^2 + \pmb{Q} \cdot \pmb{R} = \pmb{P}_{\text{conv}}^2 + 2 \pmb{Q} \cdot \pmb{P}_{\text{conv}} + \pmb{Q}^2$
+
+$\pmb{P}_{\text{conv}}^2 + \pmb{Q} \cdot \pmb{P}_{\text{conv}} - \pmb{Q} \cdot \pmb{R} = 0$
+
+Quadratic formula:
+$\pmb{P}_{\text{conv}} = -\frac{\pmb{Q}}{2} + \sqrt{\frac{\pmb{Q}^2}{4} + \pmb{Q} \cdot \pmb{R}}$
+
+### 
+
 # Extended-Kalman-Filter (EKF)
 
 
 
 # Information-Filter (IF)
 
+- https://cse.sc.edu/~terejanu/files/tutorialKF.pdf 
+- http://ais.informatik.uni-freiburg.de/teaching/ws12/mapping/pdf/slam06-eif.pdf 
+- http://ais.informatik.uni-freiburg.de/teaching/ws13/mapping/pdf/slam07-eif.pdf 
 
 [Back to index](index.html) &raquo;
 [Back to top](#) 
