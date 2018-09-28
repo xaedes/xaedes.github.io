@@ -230,6 +230,61 @@ $\pmb{P}_{\text{conv}} = -\frac{\pmb{Q}}{2} + \sqrt{\frac{\pmb{Q}^2}{4} + \pmb{Q
 
 # Information-Filter (IF)
 
+State estimation uncertainty $\pmb{P}$ is replaced by information matrix $\pmb{Y}$:
+
+$\pmb{Y} = \pmb{P}^{-1}$
+
+State estimation $\pmb{x}$ is replaced by information vector $\pmb{y}$:
+
+$\pmb{y} = \pmb{P}^{-1} \cdot \pmb{x}$
+
+Prediction:
+
+$\pmb{Y}_k = (\pmb{F} \cdot \pmb{Y}^{-1}_{k-1} \cdot \pmb{F}^T + \pmb{Q})^-1$
+
+
+$\pmb{Y}_k = (\pmb{F}^T + \pmb{Y}_{k-1} \cdot \pmb{F}^{-1} \cdot \pmb{Q})^-1 \cdot \pmb{Y}_{k-1} \cdot \pmb{F}^{-1}$ Alternative formulation avoiding inverse of $\pmb{Y}$.
+
+$\pmb{y}_k = \pmb{Y}_k \cdot (\pmb{F} \cdot \pmb{Y}^{-1}_{k-1} \cdot \pmb{y}_{k-1} + \pmb{B} \cdot \pmb{u})$
+
+Observation:
+
+$\pmb{Y}_k = \pmb{H}^T \cdot \pmb{R}^{-1} \cdot \pmb{H} + \pmb{Y}_{k-1}$
+
+$\pmb{y}_k = \pmb{H}^T \cdot \pmb{R}^{-1} \cdot \pmb{z}_k + \pmb{y}_{k-1}$
+
+## Examples
+
+### Simple State Tracking with Observations
+
+All matrices are $\in \mathbb{R}^{1 \times 1} $, so we simplify them to scalars $\in \mathbb{R}$:
+
+$\pmb{F} = F = 1$
+
+$\pmb{H} = H = 1$
+
+$\pmb{B} = B = 0$
+
+$\pmb{R} = R$, 
+$\pmb{Q} = Q$,
+$\pmb{Y} = Y$,
+$\pmb{y} = y$,
+$\pmb{x} = x$,
+$\pmb{z} = z$
+
+Prediction:
+
+$Y_k = (1 + Y_{k-1} \cdot Q)^{-1} \cdot Y_{k-1}$
+
+...
+
+Observation:
+
+...
+
+## Weblinks
+
+- https://en.wikipedia.org/wiki/Kalman_filter#Information_filter
 - https://cse.sc.edu/~terejanu/files/tutorialKF.pdf 
 - http://ais.informatik.uni-freiburg.de/teaching/ws12/mapping/pdf/slam06-eif.pdf 
 - http://ais.informatik.uni-freiburg.de/teaching/ws13/mapping/pdf/slam07-eif.pdf 
