@@ -230,22 +230,31 @@ $\pmb{P}_{\text{conv}} = -\frac{\pmb{Q}}{2} + \sqrt{\frac{\pmb{Q}^2}{4} + \pmb{Q
 
 # Information-Filter (IF)
 
-State estimation uncertainty $\pmb{P}$ is replaced by information matrix $\pmb{Y}$:
+One problem with the kalman filter is that you can't practically represent infinite variance. But especially in the initial conditions we are in the situation to know nothing a first and therefore have infinite state estimation (co-)variance. To be able to represent this, the kalman filter equations can be reformulated:
+
+The state estimation uncertainty/covariance $\pmb{P}$ is replaced by the *information matrix* $\pmb{Y}$:
 
 $\pmb{Y} = \pmb{P}^{-1}$
 
-State estimation $\pmb{x}$ is replaced by information vector $\pmb{y}$:
+State estimation $\hat{\pmb{x}}$ is replaced by the *information vector* $\pmb{y}$:
 
 $\pmb{y} = \pmb{P}^{-1} \cdot \pmb{x}$
 
+The case of infinite covariance, i.e. no information can now be represented by both information matrix and information vector becoming $\pmb{0}$.
+
 Prediction:
 
-$\pmb{Y}_k = (\pmb{F} \cdot \pmb{Y}^{-1}_{k-1} \cdot \pmb{F}^T + \pmb{Q})^-1$
-
-
-$\pmb{Y}_k = (\pmb{F}^T + \pmb{Y}_{k-1} \cdot \pmb{F}^{-1} \cdot \pmb{Q})^-1 \cdot \pmb{Y}_{k-1} \cdot \pmb{F}^{-1}$ Alternative formulation avoiding inverse of $\pmb{Y}$.
+$\pmb{Y}_k = (\pmb{F} \cdot \pmb{Y}^{-1}_{k-1} \cdot \pmb{F}^T + \pmb{Q})^{-1}$
 
 $\pmb{y}_k = \pmb{Y}_k \cdot (\pmb{F} \cdot \pmb{Y}^{-1}_{k-1} \cdot \pmb{y}_{k-1} + \pmb{B} \cdot \pmb{u})$
+
+
+
+Alternative prediction formulation [avoiding inverse](tech-linear-algebra.html#h1.7_useful-transformations) of $\pmb{Y}_{k-1}$:
+
+$\pmb{Y}_k = (\pmb{F}^T + \pmb{Y}_{k-1} \cdot \pmb{F}^{-1} \cdot \pmb{Q})^{-1} \cdot \pmb{Y}_{k-1} \cdot \pmb{F}^{-1}$ 
+
+$\pmb{y}_k = (\pmb{F}^T + \pmb{Y}_{k-1} \cdot \pmb{F}^{-1} \cdot \pmb{Q})^{-1} \cdot (\pmb{y}_{k-1} + \pmb{Y}_{k-1} \cdot \pmb{F}^{-1} \cdot \pmb{B} \cdot \pmb{u})$
 
 Observation:
 
