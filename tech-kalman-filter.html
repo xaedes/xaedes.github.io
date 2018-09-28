@@ -124,6 +124,8 @@ $\pmb{K} \in \mathbb{R}^{N \times M}$
 
 $\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k + \pmb{K} \cdot \pmb{w}$
 
+$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k \cdot (1-\pmb{K}) + \pmb{K} \cdot \pmb{z}_k$
+
 $\pmb{P}_{k+1} = \pmb{P}_k - \pmb{K} \cdot \pmb{S} \cdot \pmb{K}^T$
 
 <br/ >
@@ -183,27 +185,15 @@ residual covariance:
 $\pmb{S} = \pmb{P} + \pmb{R}$
 
 kalman gain:
-$\pmb{K} = \pmb{P} \cdot \pmb{S}^{-1} = \frac{\pmb{P}}{\pmb{P} + \pmb{R}}$
+$\pmb{K} = \pmb{P} \cdot \pmb{S}^{-1}$
 
 $\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k + \pmb{K} \cdot \pmb{w}$
-
-$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k + \frac{\pmb{P}}{\pmb{P} + \pmb{R}} \cdot \pmb{w}$
-
-$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k + \frac{\pmb{P}_k}{\pmb{P}_k + \pmb{R}} \cdot (\pmb{z}_k - \hat{\pmb{x}}_k)$
-
-$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k + \frac{\pmb{P}_k}{\pmb{P}_k + \pmb{R}} \cdot \pmb{z}_k - \frac{\pmb{P}_k}{\pmb{P}_k + \pmb{R}} \cdot \hat{\pmb{x}}_k$
-
-$\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k \cdot (1 - \frac{\pmb{P}_k}{\pmb{P}_k + \pmb{R}}) + \frac{\pmb{P}_k}{\pmb{P}_k + \pmb{R}} \cdot \pmb{z}_k$
 
 $\hat{\pmb{x}}_{k+1} = \hat{\pmb{x}}_k \cdot (1 - \pmb{K}) + \pmb{K} \cdot \pmb{z}_k$
 
 $\pmb{P}_{k+1} = \pmb{P}_k - \pmb{K} \cdot \pmb{S} \cdot \pmb{K}^T$
 
-$\pmb{P}_{k+1} = \pmb{P}_k - \frac{\pmb{P}_k^2}{\pmb{P}_k + \pmb{R}}$
-
-$\pmb{P}_{k+1} = \pmb{P}_k - \pmb{P}_k \cdot \pmb{K}$
-
-$\pmb{P}_{k+1} = \pmb{P}_k \cdot (1 - \pmb{K})$
+$\pmb{P}_{k+1} = \pmb{P}_k \cdot (1 - \pmb{K}^T)$
 
 $\pmb{P}$ converges to $\pmb{P}_{\text{conv}}$ for constant $\pmb{Q}$ and $\pmb{R}$.
 
@@ -230,7 +220,7 @@ $\pmb{P}_{\text{conv}} = -\frac{\pmb{Q}}{2} + \sqrt{\frac{\pmb{Q}^2}{4} + \pmb{Q
 
 # Information-Filter (IF)
 
-One problem with the kalman filter is that you can't practically represent infinite variance. But especially in the initial conditions we are in the situation to know nothing a first and therefore have infinite state estimation (co-)variance. To be able to represent this, the kalman filter equations can be reformulated:
+One problem with the kalman filter is that you can't practically represent infinite variance. But especially in the initial conditions we are in the situation to know nothing at first and therefore have infinite state estimation (co-)variance. To be able to represent this, the kalman filter equations can be reformulated:
 
 The state estimation uncertainty/covariance $\pmb{P}$ is replaced by the *information matrix* $\pmb{Y}$:
 
@@ -251,6 +241,13 @@ $\pmb{y}_k = \pmb{Y}_k \cdot (\pmb{F} \cdot \pmb{Y}^{-1}_{k-1} \cdot \pmb{y}_{k-
 
 
 Alternative prediction formulation [avoiding inverse](tech-linear-algebra.html#h1.7_useful-transformations) of $\pmb{Y}_{k-1}$:
+
+
+$\pmb{Y}_k = (\pmb{F} \cdot \pmb{P}_{k-1} \cdot \pmb{F}^T + \pmb{Q})^{-1}$
+
+$\pmb{y}_k = \pmb{Y}_k \cdot (\pmb{F} \cdot \pmb{P}_{k-1} \cdot \pmb{y}_{k-1} + \pmb{B} \cdot \pmb{u})$
+
+Joke, scnr, here the right one:
 
 $\pmb{Y}_k = (\pmb{F}^T + \pmb{Y}_{k-1} \cdot \pmb{F}^{-1} \cdot \pmb{Q})^{-1} \cdot \pmb{Y}_{k-1} \cdot \pmb{F}^{-1}$ 
 
@@ -283,13 +280,16 @@ $\pmb{z} = z$
 
 Prediction:
 
-$Y_k = (1 + Y_{k-1} \cdot Q)^{-1} \cdot Y_{k-1}$
+$Y_k = (1 + Y_{k-1} \cdot Q)^{-1} \cdot Y_{k-1} \cdot 1$ 
 
-...
+$y_k = (1 + Y_{k-1} \cdot Q)^{-1} \cdot (y_{k-1} + Y_{k-1} \cdot B \cdot u)$
 
 Observation:
 
-...
+$Y_k = R^{-1} + Y_{k-1}$
+
+$y_k = R^{-1} \cdot z_k + y_{k-1}$
+
 
 ## Weblinks
 
