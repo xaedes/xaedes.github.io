@@ -247,7 +247,7 @@ $\pmb{Y}_k = (\pmb{F} \cdot \pmb{P}_{k-1} \cdot \pmb{F}^T + \pmb{Q})^{-1}$
 
 $\pmb{y}_k = \pmb{Y}_k \cdot (\pmb{F} \cdot \pmb{P}_{k-1} \cdot \pmb{y}_{k-1} + \pmb{B} \cdot \pmb{u})$
 
-Joke, scnr, here the right one:
+Joke, scnr, here with neither $\pmb{Y}_{k-1}^{-1}$, nor $\pmb{P}_{k-1}$:
 
 $\pmb{Y}_k = (\pmb{F}^T + \pmb{Y}_{k-1} \cdot \pmb{F}^{-1} \cdot \pmb{Q})^{-1} \cdot \pmb{Y}_{k-1} \cdot \pmb{F}^{-1}$ 
 
@@ -258,6 +258,74 @@ Observation:
 $\pmb{Y}_k = \pmb{H}^T \cdot \pmb{R}^{-1} \cdot \pmb{H} + \pmb{Y}_{k-1}$
 
 $\pmb{y}_k = \pmb{H}^T \cdot \pmb{R}^{-1} \cdot \pmb{z}_k + \pmb{y}_{k-1}$
+
+## Implementation
+
+```python
+    from funcy import memoize
+    def hash_nparr(arr):
+        return hash(arr.tostring())
+
+    class information_filter:
+        F = None
+        H = None
+        P = None
+        Q = None
+        R = None
+        Y = None
+        y = None
+        
+        def __init__(self, F, H, B, Q, R, Y0, y0):
+            self.F = F
+            self.H = H
+            self.B = B
+            self.Q = Q
+            self.R = R
+            self.Y = Y0
+            self.y = y0
+        
+        @memoize(key_func=lambda self, HR, verbose=None: hash_nparr(HR[0]) ^ hash_nparr(HR[1]))
+        def _HTRinv(self, HR):
+            H,R=HR
+            return H.T.dot(np.linalg.inv(R))
+        
+        @memoize(key_func=lambda self, F, verbose=None: hash_nparr(F))
+        def F_inv(self, F):
+            return np.linalg.inv(F)
+        
+        def observe(self, z):
+            _HTRinv = self._HTRinv((self.H, self.R))
+            self.Y = _HTRinv.dot(self.H) + self.Y
+            self.y = _HTRinv.dot(z) + self.y
+            return self
+        
+        def predict(self, u=None):
+            def _predict(F, F_inv, Q, Y, y, B, u):
+                tmp = np.linalg.inv(F.T + Y.dot(F_inv).dot(Q))
+                Y_new = tmp.dot(Y).dot(F_inv)
+                y_new = tmp.dot(y + Y.dot(Y).dot(F_inv).dot(B).dot(u))
+                return Y_new, y_new
+
+            def _predict_without_B(F, F_inv, Q, Y, y):
+                tmp = np.linalg.inv(F.T + Y.dot(F_inv).dot(Q))
+                Y_new = tmp.dot(Y).dot(F_inv)
+                y_new = tmp.dot(y)
+                return Y_new, y_new
+            
+            F_inv = self.F_inv(self.F)
+            if self.B.size == 0:
+                self.Y, self.y = _predict_without_B(self.F,F_inv,self.Q,self.Y,self.y)
+            else:
+                assert u is not None and u.shape==(self.B.shape[0])
+                self.Y, self.y = _predict(self.F,F_inv,self.Q,self.Y,self.y,self.B,self.u)
+            return self
+
+        def Px(self):
+            assert(is_matrix_invertible(self.Y))
+            cov = np.linalg.inv(self.Y)
+            P, x = cov, cov.dot(self.y)
+            return P, x
+```
 
 ## Examples
 
