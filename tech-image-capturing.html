@@ -9,10 +9,89 @@
 [Back to index](index.html)
 
 # Image Capturing
-
 # Camera Models
-
 ## Pin hole camera model
+
+# One-Dimensional Case
+
+```python
+import numpy as np
+import math
+
+def rotation(radian):
+    cs,sn = math.cos(radian), math.sin(radian)
+    return np.array([
+        [cs, -sn],
+        [sn, cs]
+    ])
+
+def transform_wrld_cam(x_cam_wrld, y_cam_wrld, alpha_cam_wrld, x_cam, y_cam):
+    cs, sn = np.cos(alpha_cam_wrld-math.pi/2), np.sin(alpha_cam_wrld-math.pi/2)
+    x_wrld = x_cam_wrld + x_cam * cs - y_cam * sn
+    y_wrld = y_cam_wrld + x_cam * sn + y_cam * cs
+    return x_wrld, y_wrld
+
+def transform_cam_wrld(x_cam_wrld, y_cam_wrld, alpha_cam_wrld, x_wrld, y_wrld):
+    dx = (x_wrld - x_cam_wrld)
+    dy = (y_wrld - y_cam_wrld)
+    cs, sn = np.cos(alpha_cam_wrld-math.pi/2), np.sin(alpha_cam_wrld-math.pi/2)
+    x_cam =  dx * cs + dy * sn
+    y_cam = -dx * sn + dy * cs
+    return x_cam, y_cam    
+
+def transform_img_world(camera_pos, camera_direction, fov, resolution, world_points):
+    world_cam = rotation(camera_direction-math.pi/2)
+    cam_world = world_cam.T
+    focal_length = (resolution-1)/(2*math.tan(fov/2))
+    focal_center = (resolution-1)/2
+
+    cam_points = cam_world.dot((world_points-camera_pos).T).T
+    img_points = cam_points[:,0] * focal_length / cam_points[:,1] + focal_center
+    
+    return img_points
+
+def delta_angle(a1,a2):
+    #https://gamedev.stackexchange.com/a/4472/14704
+    return math.pi - np.abs(np.abs(a1-a2)-math.pi)
+
+def in_frustum(origin, direction, fov, points):
+    rel = points-origin
+    sel_valid = (rel[:,0] != 0) | (rel[:,1] != 0)
+    point_directions = np.arctan2(rel[sel_valid,1], rel[sel_valid,0])
+    rel_dir = delta_angle(point_directions, direction)
+    #print(rel_dir)
+    result = np.zeros(shape=(points.shape[0]),dtype=bool)
+    result[sel_valid] = np.abs(rel_dir) < fov/2.0
+    return result
+
+def render_circle(circle_pos, circle_radius, camera_pos, camera_direction, fov, resolution):
+    image = np.zeros(shape=(resolution))
+    
+    num_vertices = 16
+    circle_angles = np.linspace(0, 2*math.pi, num_vertices)
+    world_points_circle = circle_pos + circle_radius * np.array([(math.cos(angle),math.sin(angle)) for angle in np.linspace(0,2*math.pi,num_vertices)])
+    sel_in_frustum = in_frustum(camera_pos, camera_direction, fov, world_points_circle)
+    img_points_tower = transform_img_world(camera_pos, camera_direction, fov, resolution, world_points_tower[sel_in_frustum])
+
+    if img_points_tower.size > 0:
+        min_tower = max(0,int(0.5+img_points_tower.min()))
+        max_tower = min(resolution-1,int(0.5+img_points_tower.max()))
+
+        image[min_tower:max_tower+1] = 1
+    
+    return image
+    
+img = render_camera(
+    circle_pos = (14,14), 
+    circle_radius = 4, 
+    camera_pos = (1,1),
+    camera_direction = 45*math.pi/180, 
+    fov = 60*math.pi/180, 
+    resolution = 320
+)
+```
+
+
 
 [Back to index](index.html) &raquo;
 [Back to top](#) 
