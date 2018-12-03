@@ -51,6 +51,31 @@ $d(\textbf{point}, \textbf{line}) = \pmb{x} \cdot \pmb{n} - d$
 ### d(line segment, circle)
 ### d(circle, circle)
 
+```python
+def is_point_in_triangle_2d(clockwise_triangle, point):
+    # https://stackoverflow.com/a/2049593
+    
+    def signed_distance(p, p1, p2):
+        px,py = p[:2]
+        p1x,p1y = p1[:2]
+        p2x,p2y = p2[:2]
+        # line point distance
+        return (px - p2x) * (p1y - p2y) - (p1x - p2x) * (py - p2y)
+    
+    p0,p1,p2 = reversed(clockwise_triangle)
+    
+    d0 = signed_distance(point, p0, p1)
+    d1 = signed_distance(point, p1, p2)
+    d2 = signed_distance(point, p2, p0)
+    
+    has_neg = (d0 < 0) or (d1 < 0) or (d2 < 0)
+    has_pos = (d0 > 0) or (d1 > 0) or (d2 > 0)
+    
+    is_inside = not(has_neg and has_pos)
+    
+    return is_inside
+```
+
 # Distance metrics
 
 ## angle difference:

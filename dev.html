@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<title>Development and Software</title>
+<link rel="stylesheet" href="lib/highlight-styles/vs.css">
+
+
+<xmp theme="spacelab" style="display:none;" toc="true" >
+
+[Back to index](index.html)
+
+# Development and Software
+
+ - [Linux Subpage](linux.html)
+
+ - [The Beauty of Programming](https://www.brynmawr.edu/cs/resources/beauty-of-programming)
+ - [Software Disenchantment](http://tonsky.me/blog/disenchantment/), [Hackernews Discussion](https://news.ycombinator.com/item?id=18012334)
+ - [How to name things: the hardest problem in programming](https://www.slideshare.net/pirhilton/how-to-name-things-the-hardest-problem-in-programming)
+ - [When to clean up your code?](https://codewithoutrules.com/2018/11/02/when-clean-up-your-code/)
+ 
+## Psychology of Dev
+
+ - [Coding, Fast and Slow: Developers and the Psychology of Overconfidence](http://blog.hut8labs.com/coding-fast-and-slow.html?reddit)
+ - [12 Years Later — What I’ve learned about being a software engineer — Medium](https://medium.com/@landongn/12-years-later-what-i-ve-learned-about-being-a-software-engineer-d6e334d6e8a3)
+ - [Ask HN: Does anyone dream of code? | Hacker News](https://news.ycombinator.com/item?id=13597369)
+ - [The mythical 10x programmer - &lt;antirez&gt;](http://antirez.com/news/112)
+ - [The Debugging Mindset - ACM Queue](http://queue.acm.org/detail.cfm?id=3068754)
+ - [The Debugging Mindset | Hacker News](https://news.ycombinator.com/item?id=14020796)
+ - [xaedes&#39; news](http://www.netvibes.com/xaedes#ki)
+ - [What it feels like to be in the zone as a programmer – dopeboy – Engineer](http://dopeboy.github.io/in-the-zone/)
+ - [Maker&#39;s Schedule, Manager&#39;s Schedule](http://www.paulgraham.com/makersschedule.html)
+ - [Survival of the Mediocre Mediocre](https://www.ribbonfarm.com/2018/04/24/survival-of-the-mediocre-mediocre/)
+ - [How &#39;DevOps&#39; is Killing the Developer](https://jeffknupp.com/blog/2014/04/15/how-devops-is-killing-the-developer/)
+ - [Anti-Flow – Rands in Repose](http://randsinrepose.com/archives/anti-flow/#fnref-3471-1)
+ - [The Tyranny of Stuctureless](https://www.jofreeman.com/joreen/tyranny.htm)
+ - [How To Get Your Teammates To Follow Your Lead — WORK: A Guide](https://www.workaguide.com/blog/2018/6/15/how-to-get-your-teammates-to-follow-your-lead)
+
+
+## Sublime Text
+
+- [Sublime Text](https://www.sublimetext.com/3)
+- [Install Package Control](https://packagecontrol.io/installation)
+- [Install Sublimeclang on ST3 (Windows)](https://forum.sublimetext.com/t/install-sublimeclang-on-st3-windows/11081/4)
+- [Sublime Text Syntax Definitions](https://www.sublimetext.com/docs/3/syntax.html)
+- [TabNine](https://tabnine.com) is the all-language autocompleter. It uses machine learning to provide responsive, reliable, and relevant suggestions
+
+
+## ROS
+
+- https://github.com/leggedrobotics/ros_best_practices/wiki
+
+## Languages
+
+### Prolog
+
+- [2018-10-10 Hackernews Discussion](https://news.ycombinator.com/item?id=18188003)
+
+### Python
+
+- Use [%autoreload](https://blog.godatadriven.com/write-less-terrible-notebook-code) in your python notebooks to reload imported packages on file change
+- [5 useful Python packages from Kaggle’s kernels](https://medium.com/logicai/5-useful-python-packages-from-kaggles-kernels-you-didn-t-know-existed-part-2-4b35ba2d812): pyahocorasick, Pandas-profiling, funcy, fancyimpute, missingno
+
+Disable all warnings:
+
+```python
+import warnings
+warnings.filterwarnings('ignore')
+```
+
+## Virtualization
+
+- I use [Vagrant](https://www.vagrantup.com/) to define linux development virtual machines
+- [VirtualBox](https://www.virtualbox.org/) is a easy to use virtual machine provider that operates well with Vagrant
+- [How to save/remove existing Vagrant box and restore the saved vagrant box](https://www.webfoobar.com/index.php/node/52)
+
+- [Boot VM from physical harddrive or USB stick](https://www.howtogeek.com/187721/how-to-boot-from-a-usb-drive-in-virtualbox/) for example:
+VBoxManage internalcommands createrawvmdk -filename C:\physicalDisk4.vmdk -rawdisk \\.\PhysicalDrive4
+- [Granting access physical harddrive permissions under windows](https://superuser.com/a/648215/125700), [diskpart commands](http://knowledge.seagate.com/articles/en_US/FAQ/005929en) [Clear Read-Only flag on Disk in Windows 7 using Diskpart](https://pario.no/2011/05/23/clear-read-only-flag-on-disk-in-windows-7-using-diskpart/) "list disk", "select disc 4", "attributes disk clear readonly"
+
+## Software Configuration Management
+
+- [[wikipedia]](https://en.wikipedia.org/wiki/Software_configuration_management):
+  In software engineering, software configuration management (SCM or S/W CM) is the task of tracking and controlling changes in the software, part of the larger cross-disciplinary field of configuration management. SCM practices include revision control and the establishment of baselines. If something goes wrong, SCM can determine what was changed and who changed it. If a configuration is working well, SCM can determine how to replicate it across many hosts.
+- stow
+- Puppet
+- Chef
+- Ansible
+- others:
+  -  Salt
+  -  CFEngine
+  -  Otter
+
+
+## Online tools
+
+- Online compiler [C++ shell](http://cpp.sh/) is very useful for small C++ tests à la "hm I wonder if this C++ construct would compile, let's check"
+- Online compiler [godbolt](https://godbolt.org/) compiles many Languages (Analysis, Assembly, C, C++, Cppx, CUDA, D, Go, Haskell, ispc, LLVM IR, Pascal, Rust, Swift) and lets you inspect generated assembly for various compilers and targets directly in browser
+- Latex in Browser [Overleaf](https://www.overleaf.com/)
+- Draw symbol and get corresponding latex code with [Detexify](http://detexify.kirelabs.org/classify.html)
+- Draw symbol and find corresponding unicode characters with [Shapecatcher](http://shapecatcher.com/)
+- [Client Side JavaScript Password Generator](tools-pwgen.html)
+
+## Benchmarking
+
+- [C++ Benchmarks: Container Lookups](https://constantsmatter.com/posts/cpp-benchmark-container-lookup/)
+- [Benchmarking with Linear Regression](https://blog.janestreet.com/core_bench-micro-benchmarking-for-ocaml/) By differencing slopes, one can also estimate the impact of each software component by benchmarking code with components replaced by no-ops. One should also always measure the slope of no-ops to get the overhead of the benchmark tool itself.
+
+## Human Machine Interface
+
+- [User Perception Of Performance Delays](https://developers.google.com/web/fundamentals/performance/rail#ux)
+
+## Excel
+
+- [Excel Translator](https://excel-translator.de/) to translate excel functions in different languages (English, German, etc.)
+- To draw from normal distributed random variable in Excel cell: <br \>
+  English: "NORMINV(RAND(); mean; std)"  <br \>
+  German: "NORMINV(ZUFALLSZAHL(); mean; std)"
+
+## Machine Learning
+
+### Model Zoos
+
+- https://modeldepot.io/
+- https://modelzoo.co/
+- 
+
+## Software Licenses
+
+- [AGPL-3.0](https://opensource.org/licenses/AGPL-3.0)
+
+## Software Architecture
+
+- [state.js](https://github.com/steelbreeze/state.js): Hierarchical finite state machine for node and web browsers
+- [Harel, David. "Statecharts: A visual formalism for complex systems." Science of computer programming 8.3 (1987): 231-274.](https://www.sciencedirect.com/science/article/pii/0167642387900359)
+
+Formal Modelling and Verification
+
+- [TLA+ Introduction](https://learntla.com/introduction/) [Example](https://learntla.com/introduction/example/)
+- [Modeling Message Queues in TLA+](https://www.hillelwayne.com/post/tla-messages/)
+
+## Geo
+
+- https://xkcd.com/977/
+- https://github.com/Jorl17/open-elevation
+- https://medium.com/planet-stories/a-gentle-introduction-to-gdal-part-1-a3253eb96082
+- https://medium.com/planet-stories/a-gentle-introduction-to-gdal-part-2-map-projections-gdalwarp-e05173bd710a
+- https://medium.com/planet-stories/a-gentle-introduction-to-gdal-part-3-geodesy-local-map-projections-794c6ff675ca
+- http://spatialreference.org/ref/
+- https://tilemill-project.github.io/tilemill/docs/guides/terrain-data/
+- https://github.com/dwtkns/gdal-cheat-sheet
+
+### data sources
+
+- https://visibleearth.nasa.gov/view.php?id=73934
+
+## Misc
+
+Approximate Regex
+
+ - http://ducktape.blot.im/tre-a-regex-engine-with-approximate-matching
+ - https://laurikari.net/tre/faq/
+ - https://laurikari.net/tre/download/
+
+[Back to index](index.html) &raquo;
+[Back to top](#) 
+
+</xmp>
+
+<script src="lib/strapdown-zeta/strapdown.min.js"></script>
+</html>

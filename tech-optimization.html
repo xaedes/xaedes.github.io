@@ -19,7 +19,30 @@
 
 ## Iterative Optimizations
 ## Gradient-Descent
+
+https://towardsdatascience.com/10-gradient-descent-optimisation-algorithms-86989510b5e9
+
 ## Quadratic Approximation 
+
+**When to use:** 
+Error surface is (nearly) quadratic, that also implies a global optimum
+
+Very fast and correct when assumptions are met.
+
+**Principle:**
+Sample the error surface on three points that completely define a quadratic function. 
+Compute the minimum/maximum of the implied quadratic formula analytically.
+
+When the error surface is not exactly quadratic one may use the principle iteratively.
+Sample the error surface around the previously estimated optimum and repeat until convergence.
+
+Multi-dimensional cases can be mapped to one-dimensional quadratic problems by sampling along lines. 
+This can be axis-parallel lines if the error surface is point symmetric and not skewed or rotated.
+Otherwise PCA could be used to generate line directions. 
+Or use a few line directions and iteratively average between each corresponding optimum. 
+The convergence can then be further improved by a weighted average with weights assigned proportional to error improvement.
+
+## Convergence Criteria
 
 # Multi Objective Optimization
 

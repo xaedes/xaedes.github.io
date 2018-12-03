@@ -42,6 +42,30 @@ https://en.wikipedia.org/wiki/Invertible_matrix#Other_properties
 
 ## Representing Affine Transformations
 
+Convert quaternion and translation to 4x4 transformation matrix:
+
+```python
+def tfmatrix4x4(qx,qy,qz,qw,tx,ty,tz): 
+    qw2 = qw*qw 
+    qx2 = qx*qx 
+    qy2 = qy*qy 
+    qz2 = qz*qz 
+    qxy = qx*qy 
+    qxz = qx*qz 
+    qyz = qy*qz 
+    qwx = qw*qx 
+    qwy = qw*qy 
+    qwz = qw*qz 
+
+    qtwo_s = 2/(qw2 + qx2 + qy2 + qz2) 
+
+    return np.array([ 
+        [1 - qtwo_s*(qy2 + qz2), qtwo_s*(qxy - qwz), qtwo_s*(qxz + qwy),tx], 
+        [qtwo_s*(qxy + qwz), 1 - qtwo_s*(qx2 + qz2), qtwo_s*(qyz - qwx),ty], 
+        [qtwo_s*(qxz - qwy), qtwo_s*(qyz + qwx), 1 - qtwo_s*(qx2 + qy2),tz], 
+        [0,0,0,1] 
+    ])
+```
 ### Dual Quaternions
 
 - http://www.chinedufn.com/dual-quaternion-shader-explained/
