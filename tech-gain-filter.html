@@ -142,6 +142,18 @@ $$
 a_2 = \frac{h_2}{\frac{h_1 \cdot (1-a_1)}{a_1} + h_2}
 $$
 
+# Applications
+
+- Compute P-Controller-Gain $k_{rest}$ from gain-filter behaviour. Can then also be used to correctly adapt to timestep. 
+  - for $x_{new} = x + (x_{target}-x) \cdot k_{rest} \cdot t_{dt}$
+    - $k_{rest} = \frac{k_{gain}}{k_{gain} t_{dt} - k_{gain} t_{dt gain reference} + t_{dt gain reference}}$
+    - [Details in Sympy JupyterNotebook](gainfilter_pid-rate.html)
+  - for $x_{new} = x + (x_{target}-x) \cdot k_{rest}$
+    - $k_{rest} = \frac{k_{gain} t_{dt}}{k_{gain} t_{dt} - k_{gain} t_{dt gain reference} + t_{dt gain reference}}$
+    - [Details in  Sympy JupyterNotebook](gainfilter_pid-rate-nodt.html)
+
+Compute 
+
 # Bibliography
 
 ##### [haugen2008derivation] 
